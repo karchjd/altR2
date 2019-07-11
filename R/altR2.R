@@ -66,8 +66,8 @@ altR2 <- function(lmOut) {
 
   #create results by calling the respective shrinkage functions
   result <- numeric(10)
-  esNames <- c("Ezekiel","Olkin & Pratt, K=2", "Olkin & Pratt, K=5", "Pratt", "Olkin & Pratt, Exact")
-  esNames <- c(esNames,paste0('Positive, ',esNames))
+  esNames <- c("Ezekiel","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Olkin_Pratt_Exact")
+  esNames <- c(esNames,paste0(esNames,'_Positive'))
   names(result) <- esNames
   result[1] <- lmSum$adj.r.squared
   result[2] <- OP2Estimator(Rsquared,N,p)
