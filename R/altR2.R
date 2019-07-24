@@ -31,6 +31,21 @@ OPExactEstimator <- function(Rsquared,N,p){
   return(res)
 }
 
+effectiveLH <- function(Rsquared,N,p,rhoSquared){
+  -1*(1-rhoSquared)^(N/2)*gsl::hyperg_2F1(0.5*N,0.5*N,0.5*p,rhoSquared*Rsquared)
+}
+
+
+mlEstimator <- function(Rsquared,N,p){
+  if(Rsquared<=p/N){
+    return(0)
+  }else{
+    likelihoodFunction <- purrr::partial(effectiveLH,Rsquared=Rsquared,N=N,p=p)
+    res <- optim(Rsquared,likelihoodFunction,method="Brent",lower=0,upper=1)
+    return(res$par)
+  }
+}
+
 checkInput <- function(lmOut,N,p){
   if (class(lmOut)!="lm"){
     stop("lmOut must be an output of the lm function")
@@ -66,17 +81,18 @@ altR2 <- function(lmOut) {
   }
 
   #create results by calling the respective shrinkage functions
-  result <- numeric(10)
-  esNames <- c("Ezekiel","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Olkin_Pratt_Exact")
-  esNames <- c(esNames,paste0(esNames,'_Positive'))
+  result <- numeric(11)
+  esNames <- c("Ezekiel","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Olkin_Pratt_Exact","Maximum_Likelihood")
+  esNames <- c(esNames,paste0(setdiff(esNames,"Maximum_Likelihood"),'_Positive'))
   names(result) <- esNames
   result[1] <- lmSum$adj.r.squared
   result[2] <- OP2Estimator(Rsquared,N,p)
   result[3] <- OP5Estimator(Rsquared,N,p)
   result[4] <- PEstimator(Rsquared,N,p)
   result[5] <- OPExactEstimator(Rsquared,N,p)
-  for (i in 6:10){
-    result[i] <- ifelse(result[i-5]>=0,result[i-5],0)
+  result[6] <- mlEstimator(Rsquared,N,p)
+  for (i in 7:11){
+    result[i] <- ifelse(result[i-6]>=0,result[i-6],0)
   }
   return(result)
 }

@@ -11,9 +11,23 @@ test_that("adj.R.Squared sanity", {
  })
 
 test_that("OPK+New Sanity", {
-  OP50Estimator <- purrr::partial(OPKEstimator,k=50)
+  OP50Estimator <- purrr::partial(altR2:::OPKEstimator,k=50)
   N <- nrow(x$model)
   p <- x$rank-1
   op50res <- OP50Estimator(summary(x)$r.squared,N,p)
-  expect_equivalent(op50res,normalRes["Olkin & Pratt, Exact"])
+  expect_equivalent(op50res,normalRes["Olkin_Pratt_Exact"])
 })
+
+test_that("All Similar", {
+  set.seed(21399)
+  testData <- MyDataGeneration(150,0.5,0,2,TRUE)
+  testData <- as.data.frame(cbind(testData$y,testData$X))
+  x <- lm(V1 ~ .,data=testData)
+  normalRes <- altR2(x)
+  expect(all(abs(normalRes-mean(normalRes))< 0.003))
+})
+
+
+# test_that("Maximum likelihood sanity"){
+#
+# }
