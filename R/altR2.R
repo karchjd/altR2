@@ -15,7 +15,7 @@ OPKEstimator <- function(Rsquared,N,p,k){
   return(1-factor1*factor2)
 }
 
-OP1Estimator <- purrr::partial(OPKEstimator,k=2)
+OP1Estimator <- purrr::partial(OPKEstimator,k=1)
 OP2Estimator <- purrr::partial(OPKEstimator,k=2)
 OP5Estimator <- purrr::partial(OPKEstimator,k=5)
 
