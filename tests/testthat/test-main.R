@@ -24,7 +24,7 @@ test_that("All Similar", {
   testData <- as.data.frame(cbind(testData$y,testData$X))
   x <- lm(V1 ~ .,data=testData)
   normalRes <- altR2(x)
-  expect(all(abs(normalRes-mean(normalRes))< 0.003))
+  expect(all(abs(normalRes-mean(normalRes))< 0.005),'Not all similiar')
 })
 
 
