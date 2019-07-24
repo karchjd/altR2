@@ -1,9 +1,10 @@
 hypergeoApprox <- function(Rsquared,N,p,klimit){
   sum <- 1
   for (k in 1:klimit){
-    factor1 <- gamma(1+k)^2*gamma((N-p+1)/2)/gamma((N-p+1)/2+k)
-    factor2 <- (1-Rsquared)^k/factorial(k)
-    sum <- sum+factor1*factor2
+    factor1 <- gamma(1+k)^2
+    factor2 <- 1/prod(seq(from=(N-p+1)/2,by=1,to=(N-p+1)/2+k-1))
+    factor3 <- (1-Rsquared)^k/factorial(k)
+    sum <- sum+factor1*factor2*factor3
   }
   return(sum)
 }
