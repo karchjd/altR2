@@ -15,6 +15,7 @@ OPKEstimator <- function(Rsquared,N,p,k){
   return(1-factor1*factor2)
 }
 
+OP1Estimator <- purrr::partial(OPKEstimator,k=2)
 OP2Estimator <- purrr::partial(OPKEstimator,k=2)
 OP5Estimator <- purrr::partial(OPKEstimator,k=5)
 
@@ -23,6 +24,22 @@ PEstimator <- function(Rsquared,N,p){
   factor2 <- 1+2*(1-Rsquared)/(N-p-2.3)
   return(1-factor1*factor2)
 }
+
+WEstimator <-function(Rsquared,N,p){
+  return(1-(N-1)/(N-p)*(1-Rsquared))
+}
+
+SEstimator <-function(Rsquared,N,p){
+  return(1-N/(N-p)*(1-Rsquared))
+}
+
+CEstimator <- function(Rsquared,N,p){
+  factor1 <- (N-4)*(1-Rsquared)/(N-p-1)
+  factor2 <- 1+2*(1-Rsquared)/(N-p-2.3)
+  return(1-factor1*factor2)
+}
+
+
 
 OPExactEstimator <- function(Rsquared,N,p){
   factor1 <- (N-3)/(N-p-1)*(1-Rsquared)
@@ -82,18 +99,22 @@ altR2 <- function(lmOut) {
   }
 
   #create results by calling the respective shrinkage functions
-  result <- numeric(11)
-  esNames <- c("Ezekiel","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Olkin_Pratt_Exact","Maximum_Likelihood")
+  result <- numeric(19)
+  esNames <- c("Smith","Ezekiel","Wherry","Olkin_Pratt_K_1","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact","Maximum_Likelihood")
   esNames <- c(esNames,paste0(setdiff(esNames,"Maximum_Likelihood"),'_Positive'))
   names(result) <- esNames
-  result[1] <- lmSum$adj.r.squared
-  result[2] <- OP2Estimator(Rsquared,N,p)
-  result[3] <- OP5Estimator(Rsquared,N,p)
-  result[4] <- PEstimator(Rsquared,N,p)
-  result[5] <- OPExactEstimator(Rsquared,N,p)
-  result[6] <- mlEstimator(Rsquared,N,p)
-  for (i in 7:11){
-    result[i] <- ifelse(result[i-6]>=0,result[i-6],0)
+  result["Smith"] <- SEstimator(Rsquared,N,p)
+  result["Ezekiel"] <- lmSum$adj.r.squared
+  result["Wherry"] <- WEstimator(Rsquared,N,p)
+  result["Olkin_Pratt_K_1"] <- OP1Estimator(Rsquared,N,p)
+  result["Olkin_Pratt_K_2"] <- OP2Estimator(Rsquared,N,p)
+  result["Olkin_Pratt_K_5"] <- OP5Estimator(Rsquared,N,p)
+  result["Pratt"] <- PEstimator(Rsquared,N,p)
+  result["Claudy"] <- CEstimator(Rsquared,N,p)
+  result["Olkin_Pratt_Exact"] <- OPExactEstimator(Rsquared,N,p)
+  result["Maximum_Likelihood"] <- mlEstimator(Rsquared,N,p)
+  for (i in 11:19){
+    result[i] <- ifelse(result[i-10]>=0,result[i-10],0)
   }
   return(result)
 }
