@@ -31,6 +31,7 @@ OPExactEstimator <- function(Rsquared,N,p){
   return(res)
 }
 
+#implements effective marginal likelihood function as defined on page 174 in https://doi.org/10.1111/j.1467-842X.1985.tb00559.x
 effectiveLH <- function(Rsquared,N,p,rhoSquared){
   -1*(1-rhoSquared)^(N/2)*gsl::hyperg_2F1(0.5*N,0.5*N,0.5*p,rhoSquared*Rsquared)
 }

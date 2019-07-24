@@ -28,6 +28,9 @@ test_that("All Similar", {
 })
 
 
-# test_that("Maximum likelihood sanity"){
-#
-# }
+test_that("Maximum likelihood sanity",{
+  rhoRange <- seq(from=0,by=0.01,to=1)
+  lh <- -1*altR2:::effectiveLH(.25,40,10,rhoRange)
+  # plot(rhoRange,ln) visually checked against figure 2 of https://doi.org/10.3102%2F10769986027003223
+  expect_equal(which.max(lh),1)
+})
