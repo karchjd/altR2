@@ -99,10 +99,11 @@ altR2 <- function(lmOut) {
   }
 
   #create results by calling the respective shrinkage functions
-  result <- numeric(19)
-  esNames <- c("Smith","Ezekiel","Wherry","Olkin_Pratt_K_1","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact","Maximum_Likelihood")
-  esNames <- c(esNames,paste0(setdiff(esNames,"Maximum_Likelihood"),'_Positive'))
+  result <- numeric(20)
+  esNames <- c("Rsquared","Smith","Ezekiel","Wherry","Olkin_Pratt_K_1","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact","Maximum_Likelihood")
+  esNames <- c(esNames,paste0(setdiff(esNames,c("Maximum_Likelihood","Rsquared")),'_Positive'))
   names(result) <- esNames
+  result["Rsquared"] <- lmSum$r.squared
   result["Smith"] <- SEstimator(Rsquared,N,p)
   result["Ezekiel"] <- lmSum$adj.r.squared
   result["Wherry"] <- WEstimator(Rsquared,N,p)
@@ -113,8 +114,10 @@ altR2 <- function(lmOut) {
   result["Claudy"] <- CEstimator(Rsquared,N,p)
   result["Olkin_Pratt_Exact"] <- OPExactEstimator(Rsquared,N,p)
   result["Maximum_Likelihood"] <- mlEstimator(Rsquared,N,p)
-  for (i in 11:19){
-    result[i] <- ifelse(result[i-10]>=0,result[i-10],0)
+  positiveEstimators <- names(result)[grepl("*_Positive",names(result))]
+  for (posEst in positiveEstimators){
+    normalEst <- gsub("_Positive","",posEst)
+    result[posEst] <- ifelse(result[normalEst]>=0,result[normalEst],0)
   }
   return(result)
 }

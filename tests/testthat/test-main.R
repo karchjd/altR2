@@ -36,8 +36,9 @@ test_that("Maximum likelihood sanity",{
 })
 
 test_that("Positive and nonpositive are the same",{
-  normalEstimators <- setdiff(names(normalRes)[!grepl("*_Positive",names(normalRes))],"Maximum_Likelihood")
+  normalEstimators <- setdiff(names(normalRes)[!grepl("*_Positive",names(normalRes))],c("Maximum_Likelihood","Rsquared"))
   for (estimator in normalEstimators){
+    print(estimator)
     expect_equivalent(normalRes[estimator],normalRes[paste0(estimator,"_Positive")])
   }
 })
