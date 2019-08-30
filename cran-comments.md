@@ -1,25 +1,16 @@
 ## Test environments
 * local OS X install, R 3.5.0
-* ubuntu 12.04 (on travis-ci), R 3.1.2
+* Ubuntu 16.04.6 LTS (on travis-ci), R 3.6.1
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+── R CMD check results ──────────────────────────────────────── altR2 1.0.0 ────
+Duration: 12.4s
 
-There was 1 NOTE:
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
-* checking dependencies in R code ... NOTE
-  Namespace in Imports field not imported from: 'R6'
-
-  R6 is a build-time dependency.
+R CMD check succeeded
 
 ## Downstream dependencies
-I have also run R CMD check on downstream dependencies of httr 
-(https://github.com/wch/checkresults/blob/master/httr/r-release). 
-All packages that I could install passed except:
-
-* Ecoengine: this appears to be a failure related to config on 
-  that machine. I couldn't reproduce it locally, and it doesn't 
-  seem to be related to changes in httr (the same problem exists 
-  with httr 0.4).
+This is the first release of this package.
  

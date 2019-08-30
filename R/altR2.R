@@ -59,7 +59,7 @@ mlEstimator <- function(Rsquared,N,p){
     return(0)
   }else{
     likelihoodFunction <- purrr::partial(effectiveLH,Rsquared=Rsquared,N=N,p=p)
-    res <- optim(Rsquared,likelihoodFunction,method="Brent",lower=0,upper=1)
+    res <- stats::optim(Rsquared,likelihoodFunction,method="Brent",lower=0,upper=1)
     return(res$par)
   }
 }
@@ -73,7 +73,7 @@ checkInput <- function(lmOut,N,p){
     stop("The linear model must contain an intercept")
   }
 
-  if (length(coef(lmOut))!=lmOut$rank){
+  if (length(stats::coef(lmOut))!=lmOut$rank){
     stop("At least one indepedent variable is a linear combination of the remaining independent variables")
   }
 
@@ -98,7 +98,7 @@ checkInput <- function(lmOut,N,p){
 #'estimates <- altR2(lm.D9)
 #' @importFrom purrr partial
 #' @importFrom gsl hyperg_2F1
-
+#' @export
 altR2 <- function(lmOut) {
   checkInput(lmOut,N,p)
 
