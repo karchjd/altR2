@@ -80,10 +80,25 @@ checkInput <- function(lmOut,N,p){
 }
 
 
-
+#' Obtain estimates of the multiple squared correlation
+#'
+#' Returns different estimates of the multiple squared correlation.
+#'
+#' @param lmOut object of class "lm" as returned by the function \code{\link{lm}}
+#
+#' @return A named vector with the different estimates
+#' @examples
+#'## Annette Dobson (1990) "An Introduction to Generalized Linear Models".
+#'## Page 9: Plant Weight Data.
+#'ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
+#'trt <- c(4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69)
+#'group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
+#'weight <- c(ctl, trt)
+#'lm.D9 <- lm(weight ~ group)
+#'estimates <- altR2(lm.D9)
 #' @importFrom purrr partial
 #' @importFrom gsl hyperg_2F1
-#' @export
+
 altR2 <- function(lmOut) {
   checkInput(lmOut,N,p)
 

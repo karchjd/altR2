@@ -1,15 +1,18 @@
 Package: altR2
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
-Encoding: UTF-8
-LazyData: true
+Version: 1.0.0
+Title: Alternative Estimators to Adjusted R-squared For Multiple Regression Models
+Description: Provides alternative to the adjusted estimators for the estimation of the multiple squared correlation in regression models as fitted by the lm function.
+Authors@R: c(
+    person("Julian", "Karch", , "j.d.karch@fsw.leidenunivl.nl", c("aut", "cre")))
+Depends:
+    R (>= 3.5.0)
+Enhances: sp
 Imports: gsl, purrr
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    MASS (>= 7.3-51.4)
+License: GPL-2 | file LICENSE
+URL: https://github.com/karchjd/altR2
+BugReports: https://github.com/karchjd/altR2/issues
+LazyData: true
 RoxygenNote: 6.1.1
