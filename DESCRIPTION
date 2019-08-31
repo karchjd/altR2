@@ -8,7 +8,7 @@ Depends:
     R (>= 3.5.0)
 Enhances: sp
 Imports: 
-  gsl (== 1.9-10.3),
+  gsl (>= 1.9-10.3),
   purrr (>= 0.3.2),
 Suggests: 
     testthat (>= 2.1.0),
