@@ -3,7 +3,7 @@ Version: 1.0.0
 Title: Alternative Estimators to Adjusted R-squared For Multiple Regression Models
 Description: Provides alternative to the adjusted estimators for the estimation of the multiple squared correlation in regression models as fitted by the lm function.
 Authors@R: c(
-    person("Julian", "Karch", , "j.d.karch@fsw.leidenunivl.nl", c("aut", "cre")))
+    person("Julian", "Karch", , "j.d.karch@fsw.leidenuniv.nl", c("aut", "cre")))
 Depends:
     R (>= 3.5.0)
 Enhances: sp
