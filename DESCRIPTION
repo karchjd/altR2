@@ -1,6 +1,6 @@
 Package: altR2
 Version: 1.0.0
-Title: Alternative Estimators to Adjusted R-Squared For Multiple Regression Models
+Title: Alternative Estimators to Adjusted R-Squared for Multiple Regression Models
 Description: Provides alternative to the adjusted estimators for the estimation of the multiple squared correlation in regression models as fitted by the lm function.
 Authors@R: c(
     person("Julian", "Karch", , "j.d.karch@fsw.leidenuniv.nl", c("aut", "cre")))
