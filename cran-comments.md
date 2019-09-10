@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Converted the DESCRIPTION title to title case.
+
 ## Test environments
 * local OS X install, R 3.5.0
 * local Windows 10 install,  R-devel (2019-08-30 r77101)
