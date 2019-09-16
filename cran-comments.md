@@ -1,7 +1,11 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Converted the DESCRIPTION title to title case.
+* Shortend the title to 45 characters
+* Added () behind all functions names in the DESCRIPTION file
+* Added a reference.
+* Removed the license file
+
 
 ## Test environments
 * local OS X install, R 3.5.0
@@ -12,12 +16,11 @@ This is a resubmission. In this version I have:
 
 ## R CMD check results
 ── R CMD check results ──────────────────────────────────────── altR2 1.0.0 ────
-Duration: 12.4s
+Duration: 14.7s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 R CMD check succeeded
-
 ## Downstream dependencies
 This is the first release of this package.
  
