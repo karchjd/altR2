@@ -1,7 +1,7 @@
 Package: altR2
-Version: 1.0.0
+Version: 1.0.1
 Title: Alternative Estimators to Adjusted R-Squared
-Description:  Provides alternatives to the normal adjusted R-squared estimator for the estimation of the multiple squared correlation in regression models, 
+Description: Provides alternatives to the normal adjusted R-squared estimator for the estimation of the multiple squared correlation in regression models, 
               as fitted by the lm() function. The alternative estimators are described in Karch (2016) <DOI:10.31234/osf.io/v8dz5>.
 Authors@R: c(
     person("Julian", "Karch", , "j.d.karch@fsw.leidenuniv.nl", c("aut", "cre")))
@@ -17,4 +17,4 @@ License: GPL-2
 URL: https://github.com/karchjd/altR2
 BugReports: https://github.com/karchjd/altR2/issues
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1

@@ -114,13 +114,18 @@ altR2 <- function(lmOut) {
   }
 
   #create results by calling the respective shrinkage functions
+  result <- estimate_adj_R2(Rsquared, N, p)
+  return(result)
+}
+
+estimate_adj_R2 <- function(Rsquared, N, p){
   result <- numeric(20)
   esNames <- c("Rsquared","Smith","Ezekiel","Wherry","Olkin_Pratt_K_1","Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact","Maximum_Likelihood")
   esNames <- c(esNames,paste0(setdiff(esNames,c("Maximum_Likelihood","Rsquared")),'_Positive'))
   names(result) <- esNames
-  result["Rsquared"] <- lmSum$r.squared
+  result["Rsquared"] <- Rsquared
   result["Smith"] <- SEstimator(Rsquared,N,p)
-  result["Ezekiel"] <- lmSum$adj.r.squared
+  result["Ezekiel"] <- 1-(N-1)/(N-p-1)* (1-Rsquared)
   result["Wherry"] <- WEstimator(Rsquared,N,p)
   result["Olkin_Pratt_K_1"] <- OP1Estimator(Rsquared,N,p)
   result["Olkin_Pratt_K_2"] <- OP2Estimator(Rsquared,N,p)
