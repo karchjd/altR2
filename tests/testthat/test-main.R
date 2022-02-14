@@ -1,7 +1,36 @@
+library(MASS)
 OP2EstimatorManual <- function(Rsquared,N,p,k){
   factor1 <- (N-3)/(N-p-1)*(1-Rsquared)
   factor2 <- 1+2*(1-Rsquared)/(N-p+1)+8*(1-Rsquared)^2/((N-p+1)*(N-p+3))
   return(1-factor1*factor2)
+}
+
+MyDataGenerationFull <- function(n, rho, p) {
+  # constants
+  varResidual <- 10
+  theCov <- 0.3
+  theVar <- 1
+
+  # distribution predictors
+  popSigma <- matrix(theCov, nrow = p, ncol = p)
+  diag(popSigma) <- theVar
+  X <- mvrnorm(n, rep(0, p), popSigma)
+
+  # get residual variance and variance of f(x) from rho and total variance (varianceY)
+  if (rho == 0) {
+    varY <- varResidual
+  } else {
+    varY <- varResidual / (1 - rho)
+  }
+  varPreds <- varY - varResidual
+
+  # calculate coefficients
+  oneCoef <- sqrt(varPreds / (p * theVar + p*(p-1) * theCov))
+  coefs <- as.matrix(rep(oneCoef, p))
+  y <- 100 + X %*% coefs + rnorm(n, sd = sqrt(varResidual))
+
+  XY <- cbind(X, y)
+  return(XY)
 }
 
 test_that("adj.R.Squared sanity", {
@@ -113,3 +142,13 @@ test_that("new Estimator more elaborate",{
     expect_equivalent(OPExactEstimatorJul(rsquared,N,p),OPExactEstimator(rsquared,N,p),tolerance=10^-5)
   }
 })
+
+test_that("ML estimator corner case", {
+  XY <- MyDataGenerationFull(500, .9, 2)
+  X <- XY[,-ncol(XY)]
+  Y <- XY[,ncol(XY)]
+  model <- lm(Y ~ X)
+  r2res <- altR2(model)
+})
+
+
