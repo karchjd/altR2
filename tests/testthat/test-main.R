@@ -143,12 +143,10 @@ test_that("new Estimator more elaborate",{
   }
 })
 
-test_that("ML estimator corner case", {
-  XY <- MyDataGenerationFull(500, .9, 2)
-  X <- XY[,-ncol(XY)]
-  Y <- XY[,ncol(XY)]
-  model <- lm(Y ~ X)
-  r2res <- altR2(model)
+test_that("Ml Estimator bound", {
+  normal <- altR2:::mlEstimator(0.5, 100, 2, FALSE)
+  bounded <- altR2:::mlEstimator(0.5, 100, 2, TRUE)
+  expect_equivalent(normal, bounded)
 })
 
 
