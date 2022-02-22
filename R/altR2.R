@@ -63,7 +63,6 @@ mlEstimator <- function(Rsquared, N, p, tight_bound = TRUE ) {
     fisher_a <- SEstimator(Rsquared, N, p)
     lb <- fisher_a
     ub <- fisher_a + 2 * (1 - fisher_a)^2/(N + 2 * (1-fisher_a))
-    print(paste0("LB ", lb, " UB ", ub))
   }else{
     lb <- 0
     ub <- 1
