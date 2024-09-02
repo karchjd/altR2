@@ -3,4 +3,5 @@
 export(altR2)
 export(estimate_adj_R2)
 importFrom(gsl,hyperg_2F1)
+importFrom(methods,is)
 importFrom(purrr,partial)

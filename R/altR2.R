@@ -77,7 +77,7 @@ mlEstimator <- function(Rsquared, N, p, tight_bound = TRUE ) {
 }
 
 checkInput <- function(lmOut, N, p) {
-  if (class(lmOut) != "lm") {
+  if (!methods::is(lmOut, "lm")) {
     stop("lmOut must be an output of the lm function")
   }
 
@@ -150,6 +150,7 @@ altR2 <- function(lmOut) {
 #' lm.D9 <- lm(weight ~ group)
 #' estimates <- estimate_adj_R2(summary(lm.D9)$r.squared, length(weight), 1)
 #' @importFrom purrr partial
+#' @importFrom methods is
 #' @importFrom gsl hyperg_2F1
 #' @export
 estimate_adj_R2 <- function(Rsquared, N, p) {
