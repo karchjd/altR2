@@ -5,34 +5,6 @@ OP2EstimatorManual <- function(Rsquared,N,p,k){
   return(1-factor1*factor2)
 }
 
-MyDataGenerationFull <- function(n, rho, p) {
-  # constants
-  varResidual <- 10
-  theCov <- 0.3
-  theVar <- 1
-
-  # distribution predictors
-  popSigma <- matrix(theCov, nrow = p, ncol = p)
-  diag(popSigma) <- theVar
-  X <- mvrnorm(n, rep(0, p), popSigma)
-
-  # get residual variance and variance of f(x) from rho and total variance (varianceY)
-  if (rho == 0) {
-    varY <- varResidual
-  } else {
-    varY <- varResidual / (1 - rho)
-  }
-  varPreds <- varY - varResidual
-
-  # calculate coefficients
-  oneCoef <- sqrt(varPreds / (p * theVar + p*(p-1) * theCov))
-  coefs <- as.matrix(rep(oneCoef, p))
-  y <- 100 + X %*% coefs + rnorm(n, sd = sqrt(varResidual))
-
-  XY <- cbind(X, y)
-  return(XY)
-}
-
 test_that("adj.R.Squared sanity", {
   N <- nrow(x$model)
   p <- x$rank-1
@@ -67,7 +39,6 @@ test_that("Maximum likelihood sanity",{
 test_that("Positive and nonpositive are the same",{
   normalEstimators <- setdiff(names(normalRes)[!grepl("*_Positive",names(normalRes))],c("Maximum_Likelihood","Rsquared"))
   for (estimator in normalEstimators){
-    print(estimator)
     expect_equivalent(normalRes[estimator],normalRes[paste0(estimator,"_Positive")])
   }
 })
@@ -147,6 +118,11 @@ test_that("Ml Estimator bound", {
   normal <- altR2:::mlEstimator(0.5, 100, 2, FALSE)
   bounded <- altR2:::mlEstimator(0.5, 100, 2, TRUE)
   expect_equivalent(normal, bounded)
+})
+
+test_that("estimate_adj_R2", {
+  test <- estimate_adj_R2(summary(x)$r.squared, nrow(testData), ncol(testData) - 1)
+  expect_identical(test, normalRes)
 })
 
 

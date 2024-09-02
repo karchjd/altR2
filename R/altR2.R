@@ -118,6 +118,7 @@ altR2 <- function(lmOut) {
   Rsquared <- lmSum$r.squared
   N <- nrow(lmOut$model)
   p <- lmOut$rank - 1
+  print(p)
 
 
   if (!(N - p) >= 2) {
@@ -129,6 +130,28 @@ altR2 <- function(lmOut) {
   return(result)
 }
 
+
+#' Obtain estimates of the multiple squared correlation
+#'
+#' Returns different estimates of the multiple squared correlation.
+#'
+#' @param Rsquared R-squared value
+#' @param N Number of observations
+#' @param p Number of predictors
+#
+#' @return A named vector with the different estimates
+#' @examples
+#' ## Annette Dobson (1990) "An Introduction to Generalized Linear Models".
+#' ## Page 9: Plant Weight Data.
+#' ctl <- c(4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14)
+#' trt <- c(4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69)
+#' group <- gl(2, 10, 20, labels = c("Ctl", "Trt"))
+#' weight <- c(ctl, trt)
+#' lm.D9 <- lm(weight ~ group)
+#' estimates <- estimate_adj_R2(summary(lm.D9)$r.squared, length(weight), 1)
+#' @importFrom purrr partial
+#' @importFrom gsl hyperg_2F1
+#' @export
 estimate_adj_R2 <- function(Rsquared, N, p) {
   result <- numeric(20)
   esNames <- c("Rsquared", "Smith", "Ezekiel", "Wherry", "Olkin_Pratt_K_1", "Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact", "Maximum_Likelihood")
