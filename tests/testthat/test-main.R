@@ -50,7 +50,7 @@ test_that("Positive versions are positive",{
   x <- lm(V1 ~ .,data=testData)
   normalRes <- altR2(x)
   posEstimators <- grepl("*_Positive",names(normalRes))
-  expect(all(posEstimators)>=0,"not all positive estimators >0")
+  expect_true(all(normalRes[posEstimators] >= 0), "not all positive estimators >= 0")
 })
 
 test_that("All different",{
@@ -125,4 +125,17 @@ test_that("estimate_adj_R2", {
   expect_identical(test, normalRes)
 })
 
+test_that("perfect fits are supported", {
+  x <- 1:10
+  perfectFit <- lm(I(2 * x) ~ x)
 
+  estimates <- suppressWarnings(altR2(perfectFit))
+  expect_equal(unname(estimates["Maximum_Likelihood"]), 1)
+  expect_equal(unname(estimate_adj_R2(1, 10, 1)["Maximum_Likelihood"]), 1)
+})
+
+test_that("lm objects do not need to retain their model frame", {
+  modelWithoutFrame <- lm(mpg ~ wt, data = mtcars, model = FALSE)
+
+  expect_equal(altR2(modelWithoutFrame), altR2(lm(mpg ~ wt, data = mtcars)))
+})

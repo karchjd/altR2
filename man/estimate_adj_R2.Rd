@@ -9,9 +9,10 @@ estimate_adj_R2(Rsquared, N, p)
 \arguments{
 \item{Rsquared}{R-squared value}
 
-\item{N}{Number of observations}
+\item{N}{Number of observations; must be a positive integer}
 
-\item{p}{Number of predictors}
+\item{p}{Number of predictors; must be a non-negative integer and at least
+two smaller than N}
 }
 \value{
 A named vector with the different estimates

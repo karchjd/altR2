@@ -59,6 +59,10 @@ effectiveLH <- function(Rsquared, N, p, rhoSquared) {
 
 
 mlEstimator <- function(Rsquared, N, p, tight_bound = TRUE ) {
+  if (Rsquared == 1) {
+    return(1)
+  }
+
   if (tight_bound){
     fisher_a <- SEstimator(Rsquared, N, p)
     lb <- fisher_a
@@ -76,7 +80,7 @@ mlEstimator <- function(Rsquared, N, p, tight_bound = TRUE ) {
   }
 }
 
-checkInput <- function(lmOut, N, p) {
+checkInput <- function(lmOut) {
   if (!methods::is(lmOut, "lm")) {
     stop("lmOut must be an output of the lm function")
   }
@@ -87,6 +91,25 @@ checkInput <- function(lmOut, N, p) {
 
   if (length(stats::coef(lmOut)) != lmOut$rank) {
     stop("At least one indepedent variable is a linear combination of the remaining independent variables")
+  }
+}
+
+checkEstimatorInput <- function(Rsquared, N, p) {
+  if (!is.numeric(Rsquared) || length(Rsquared) != 1 || !is.finite(Rsquared) ||
+      Rsquared < 0 || Rsquared > 1) {
+    stop("Rsquared must be a single finite number between 0 and 1")
+  }
+
+  if (!is.numeric(N) || length(N) != 1 || !is.finite(N) || N < 1 || N %% 1 != 0) {
+    stop("N must be a single positive integer")
+  }
+
+  if (!is.numeric(p) || length(p) != 1 || !is.finite(p) || p < 0 || p %% 1 != 0) {
+    stop("p must be a single non-negative integer")
+  }
+
+  if (N - p < 2) {
+    stop(sprintf("Sample size %d is not at least 2 bigger than number of predictors %d", N, p))
   }
 }
 
@@ -111,19 +134,13 @@ checkInput <- function(lmOut, N, p) {
 #' @importFrom gsl hyperg_2F1
 #' @export
 altR2 <- function(lmOut) {
-  checkInput(lmOut, N, p)
+  checkInput(lmOut)
 
   # get needed quantities
   lmSum <- summary(lmOut)
   Rsquared <- lmSum$r.squared
-  N <- nrow(lmOut$model)
+  N <- stats::nobs(lmOut)
   p <- lmOut$rank - 1
-  print(p)
-
-
-  if (!(N - p) >= 2) {
-    stop(sprintf("Sample size %d is not at least 2 bigger than number of predictors %d", N, p))
-  }
 
   # create results by calling the respective shrinkage functions
   result <- estimate_adj_R2(Rsquared, N, p)
@@ -136,8 +153,9 @@ altR2 <- function(lmOut) {
 #' Returns different estimates of the multiple squared correlation.
 #'
 #' @param Rsquared R-squared value
-#' @param N Number of observations
-#' @param p Number of predictors
+#' @param N Number of observations; must be a positive integer
+#' @param p Number of predictors; must be a non-negative integer and at least
+#'   two smaller than N
 #
 #' @return A named vector with the different estimates
 #' @examples
@@ -154,6 +172,8 @@ altR2 <- function(lmOut) {
 #' @importFrom gsl hyperg_2F1
 #' @export
 estimate_adj_R2 <- function(Rsquared, N, p) {
+  checkEstimatorInput(Rsquared, N, p)
+
   result <- numeric(20)
   esNames <- c("Rsquared", "Smith", "Ezekiel", "Wherry", "Olkin_Pratt_K_1", "Olkin_Pratt_K_2", "Olkin_Pratt_K_5", "Pratt", "Claudy", "Olkin_Pratt_Exact", "Maximum_Likelihood")
   esNames <- c(esNames, paste0(setdiff(esNames, c("Maximum_Likelihood", "Rsquared")), "_Positive"))
